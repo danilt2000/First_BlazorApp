@@ -7,12 +7,24 @@
 <input placeholder ="Grocery Price" @bind="groceryPrice"/>
 
 <button @onclick="AddGrocery"> Add Grocery </button>
-<ul>
+<table class="table table-sm">
+
+	<tr>
+		<th>Name</th>
+		<th>Price</th>
+		<th></th>
+	</tr>
+
+
 	@foreach (var grocery in groceries)
 	{
-		<li>@grocery.Name -- @grocery.Price</li>
+		<Item GroceryItem="@grocery" OnGroceryPriceIncreased="OnGroceryPriceIncreased"/>
 	}
-</ul>
+
+
+</table>
+
+
 <h1>Total (@sum)</h1>
 
 
@@ -38,12 +50,30 @@
 					Name = groceryName,
 					Price = groceryPrice
 				});
-			sum += groceryPrice;
 
 			groceryName = string.Empty;
 			groceryPrice = 0;
 
 		}
+		UpdateTotalAmount();
+	}
+	private void random()
+	{
+
+		var rand = new Random();
+		int month  = rand.Next(1, 100);
+		title = month.ToString();
+	}
+
+
+	public void UpdateTotalAmount()
+	{
+		sum = groceries.Sum(x => x.Price);
+	}
+	public void OnGroceryPriceIncreased(){
+
+		UpdateTotalAmount();
+		random();//это для трека асинхронного метода который работает только на кнопку которая добавляет + 100
 
 	}
 
